@@ -14,3 +14,17 @@ spinner.down() // => 1
 spinner.down() // => 0
 spinner.down() // => -1
 */
+
+function getSpinner(){
+    var count = 0;
+    function increment(){
+        return ++count;
+    }
+    function decrement(){
+        return --count;
+    }
+    return {
+        up : increment,
+        down : decrement
+    };
+}
