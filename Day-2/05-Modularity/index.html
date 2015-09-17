@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bug Tracker</title>
+    <style>
+        .closed {
+            color : red;
+            text-decoration: line-through;
+            font-style: italic;
+            font-weight: bold;
+        }
+        li{
+            cursor: pointer;
+        }
+    </style>
+    <script src="jquery-1.11.2.js"></script>
+    <script>
+    $(function(){
+        $("#btnAddBug").click(function(){
+            var bugName = $("#txtNewBug").val();
+            $("<li>")
+                .html(bugName)
+                .click(onBugItemClick)
+                .appendTo("#olBugList");
+        });
+        function onBugItemClick(){
+            $(this).toggleClass("closed");
+        }
+    });
+    </script>
+</head>
+<body>
+    <h1>Bug Tracker</h1>
+    <div class="content">
+        <label for="">Bug :</label>
+        <input type="text" name="" id="txtNewBug">
+        <input type="button" value="Add Bug" id="btnAddBug">
+        <input type="button" value="Remove Closed" id="btnRemoveClosed">
+        <ol id="olBugList">
+
+        </ol>
+    </div>
+</body>
+</html>
