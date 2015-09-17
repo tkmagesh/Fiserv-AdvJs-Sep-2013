@@ -85,3 +85,46 @@ describe("Sort", function(){
         });
     });
 });
+
+describe("Filter", function(){
+    function filter(list, predicate){
+        var result = [];
+        for(var i=0; i<list.length; i++)
+            if (predicate(list[i]))
+                result.push(list[i]);
+        return result;
+    }
+    function negate(predicate){
+        return function(){
+            return !predicate.apply(this,arguments);
+        };
+    }
+    var costlyProductPredicate = function(product){
+        return product.cost > 50;
+    };
+    describe("All costly products [ cost > 50 ]", function(){
+
+        var costlyProducts = filter(products, costlyProductPredicate);
+        console.table(costlyProducts);
+    });
+    describe("All affordable products [ cost <= 50 ]", function(){
+        var affordableProductPredicate = negate(costlyProductPredicate);
+
+        var affordableProducts = filter(products, affordableProductPredicate);
+        console.table(affordableProducts);
+    });
+    var overstockedProductPredicate = function(product){
+        return product.units > 70;
+    };
+    describe("All over stocked products [ units > 70 ]", function(){
+        var overStockedProducts = filter(products, overstockedProductPredicate);
+        console.table(overStockedProducts);
+    });
+    describe("All well stocked products [ units <= 70 ]", function(){
+        var wellStockedProductPredicate = negate(overstockedProductPredicate);
+        var wellStockedproducts = filter(products, wellStockedProductPredicate);
+        console.table(wellStockedproducts);
+    });
+
+
+});
