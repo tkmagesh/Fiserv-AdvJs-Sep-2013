@@ -14,21 +14,7 @@
             cursor: pointer;
         }
     </style>
-    <script src="jquery-1.11.2.js"></script>
-    <script>
-    $(function(){
-        $("#btnAddBug").click(function(){
-            var bugName = $("#txtNewBug").val();
-            $("<li>")
-                .html(bugName)
-                .click(onBugItemClick)
-                .appendTo("#olBugList");
-        });
-        function onBugItemClick(){
-            $(this).toggleClass("closed");
-        }
-    });
-    </script>
+    <script src="require.js" data-main="main-prod.js"></script>
 </head>
 <body>
     <h1>Bug Tracker</h1>
