@@ -1,16 +1,16 @@
 var products = [
-    {id : 5, name : "Pen", cost : 60, units : 100, category : 1},
-    {id : 8, name : "Hen", cost : 100, units : 20, category : 2},
-    {id : 3, name : "Ten", cost : 10, units : 10, category : 1},
-    {id : 6, name : "Den", cost : 50, units : 30, category : 2},
-    {id : 7, name : "Len", cost : 70, units : 50, category : 1}
+    {id : 5, name : "Pen", cost : 60, units : 100, category : "c1"},
+    {id : 8, name : "Hen", cost : 100, units : 20, category : "c2"},
+    {id : 3, name : "Ten", cost : 10, units : 10, category : "c1"},
+    {id : 6, name : "Den", cost : 50, units : 30, category : "c2"},
+    {id : 7, name : "Len", cost : 70, units : 50, category : "c1"}
 ];
 
 /*
 sort
 filter
 some
-any
+all
 min
 max
 countBy
@@ -127,4 +127,117 @@ describe("Filter", function(){
     });
 
 
+});
+
+describe("Some", function(){
+    function some(list, predicate){
+        for(var i=0; i<list.length; i++)
+            if (predicate(list[i])) return true;
+        return false;
+    }
+    describe("Are there any costly products", function(){
+        var costlyProductPredicate = function(product){
+            return product.cost > 50;
+        };
+        var result = some(products, costlyProductPredicate);
+        console.log(result);
+    });
+});
+
+describe("All", function(){
+    function all(list, predicate){
+        for(var i=0; i<list.length; i++)
+            if (!predicate(list[i])) return false;
+        return true;
+    }
+    describe("Are all products costly?", function(){
+        var costlyProductPredicate = function(product){
+            return product.cost > 50;
+        };
+        var result = all(products, costlyProductPredicate);
+        console.log(result);
+    });
+});
+
+describe("Min", function(){
+    function min(list, valueSelector){
+        var result = Number.MAX_VALUE;
+        for(var i=0; i<list.length; i++){
+            var value = valueSelector(list[i]);
+            if (value < result) result = value;
+        }
+        return result;
+    }
+    describe("Minimum cost ", function(){
+        var costValueSelector = function(product){
+            return product.cost;
+        };
+        var minCost = min(products, costValueSelector);
+        console.log(minCost);
+    });
+});
+
+describe("Max", function(){
+    function max(list, valueSelector){
+        var result = Number.MIN_VALUE;
+        for(var i=0; i<list.length; i++){
+            var value = valueSelector(list[i]);
+            if (value > result) result = value;
+        }
+        return result;
+    }
+    describe("Maximum cost ", function(){
+        var costValueSelector = function(product){
+            return product.cost;
+        };
+        var maxCost = max(products, costValueSelector);
+        console.log(maxCost);
+    });
+});
+
+describe("Aggregate", function(){
+    function aggregate(list, aggregator, seed){
+        var result = seed;
+        for(var i=0; i<list.length; i++)
+            result = aggregator(result, list[i]);
+        return result;
+    }
+
+    describe("Sum of product values [aggregate(units * cost)]", function(){
+        var totalProductValue = aggregate(products, function(seed, product){
+            return seed + (product.cost * product.units);
+        }, 0);
+        console.log(totalProductValue);
+    });
+});
+
+describe("GroupBy", function(){
+   function groupBy(list, keySelector){
+       var result = {};
+       for(var i=0; i < list.length; i++){
+           var key = keySelector(list[i]);
+           result[key] = result[key] || [];
+           result[key].push(list[i]);
+       }
+       return result;
+   };
+   describe("By category", function(){
+       var productsByCategory = groupBy(products, function(p){ return p.category;});
+       for(var key in productsByCategory){
+           describe("Key - " + key, function(){
+               console.table(productsByCategory[key]);
+           });
+       }
+   });
+
+   describe("By cost", function(){
+       var productsByCost = groupBy(products, function(product){
+           return product.cost > 50 ? "costly" : "affordable";
+       });
+       for(var key in productsByCost){
+           describe("Key - " + key, function(){
+               console.table(productsByCost[key]);
+           });
+       }
+   });
 });
